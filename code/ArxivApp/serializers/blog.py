@@ -11,9 +11,10 @@ class BlogSerializer(ModelSerializer):
             'title',
             'body',
             'author',
-            'upvotes',
-            'downvotes',
+            'votes',
         ]
         read_only_fields = [
             'id',
+            'author',
+            'votes',
         ]
