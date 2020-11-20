@@ -9,12 +9,12 @@ FRONTEND:
   REDIRECT_URI: http://localhost:3000/redirect
 
 DATABASE:
-    HOST: db
+    HOST: localhost
     PORT: 5432
     NAME: arxivappdb
     USER: arxivapp
-    PASSWORD: arxivapp
+    PASSWORD: Pass123#
 
 ALLOWED_HOSTS:
-    - "web"
     - "localhost"
+    - "127.0.0.1"
