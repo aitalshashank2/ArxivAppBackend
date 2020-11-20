@@ -107,8 +107,8 @@ media/
 *.db
 *.pid
 
-# static files
-static
+# configurations
+config.yml
 
 # Ignore Django Migrations in Development if you are working on team
 

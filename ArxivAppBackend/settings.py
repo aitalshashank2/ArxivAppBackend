@@ -15,7 +15,7 @@ import io
 import yaml
 
 # Import environment variables
-with io.open('configuration/config.yml', 'r') as stream:
+with io.open('config.yml', 'r') as stream:
     CONFIG_VARS = yaml.safe_load(stream)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
