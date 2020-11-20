@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.postgres',
     'rest_framework',
     'ArxivApp',
 ]
@@ -96,12 +95,13 @@ WSGI_APPLICATION = 'ArxivAppBackend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': CONFIG_VARS['DATABASE']['NAME'],
         'USER': CONFIG_VARS['DATABASE']['USER'],
         'PASSWORD': CONFIG_VARS['DATABASE']['PASSWORD'],
         'HOST': CONFIG_VARS['DATABASE']['HOST'],
         'PORT': CONFIG_VARS['DATABASE']['PORT'],
+        'OPTIONS': {'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'},
     }
 }
 
@@ -153,7 +153,5 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATIC_ROOT = '../static/'
 
 STATIC_URL = '/static/'
