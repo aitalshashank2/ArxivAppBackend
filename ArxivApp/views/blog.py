@@ -8,21 +8,15 @@ from rest_framework.serializers import Serializer
 
 from ArxivApp.models import Blog
 from ArxivApp.serializers import BlogSerializer
-from ArxivApp.permissions import IsOwnerOrReadOnly
 
 
 class BlogViewSet(viewsets.ModelViewSet):
     serializer_class = BlogSerializer
     queryset = Blog.objects.all().order_by('-votes')
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     # Implement search based on the initial characters of the blog titles and author's full name
     filter_backends = [filters.SearchFilter]
     search_fields = ['$title', '$author__full_name', '$body']
-    
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
 
 
     @action(detail=True, methods=['get', ])
