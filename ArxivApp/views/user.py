@@ -4,10 +4,9 @@ import feedparser
 import dateutil.parser
 
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_409_CONFLICT
+from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_406_NOT_ACCEPTABLE, HTTP_409_CONFLICT
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from ArxivAppBackend.settings import CONFIG_VARS
 
@@ -20,13 +19,28 @@ from ArxivApp.serializers.user import UserGetSerializer, UserPostSerializer
 class UserViewSet(ModelViewSet):
 
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
         if self.action == "create" or self.action == "update" or self.action == "partial":
             return UserPostSerializer
         else:
             return UserGetSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            u = User.objects.get(email_address=request.data['email_address'])
+            serializer = UserPostSerializer(u)
+            return Response(serializer.data, status=HTTP_200_OK)
+        except User.DoesNotExist:
+            serializer = UserPostSerializer(data=request.data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=HTTP_201_CREATED)
+            else:
+                print(serializer.errors)
+                return Response(serializer.errors, status=HTTP_406_NOT_ACCEPTABLE)
+
 
     @action(detail=False, methods=['post', ],)
     def bookmark(self, request, *args, **kwargs):
@@ -41,7 +55,7 @@ class UserViewSet(ModelViewSet):
         if arxiv_id is None:
             return Response({'Error': 'Paper id not provided'}, status=HTTP_400_BAD_REQUEST)
         
-        user = request.user
+        user = User.objects.get(id=request.data['uid'])
 
         if action == "add":
             try:
@@ -65,7 +79,7 @@ class UserViewSet(ModelViewSet):
                 feed = feed.feed
 
                 if feed.opensearch_totalresults == 1 and entries[0].title == "Error":
-                    return Response({'Error': 'Invalid arxiv_id', }, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'Error': 'Invalid arxiv_id', }, status=HTTP_400_BAD_REQUEST)
                 
                 entry = entries[0]
 
@@ -173,7 +187,7 @@ class UserViewSet(ModelViewSet):
         if arxiv_id is None:
             return Response({'Error': 'Paper id not provided'}, status=HTTP_400_BAD_REQUEST)
         
-        user = request.user
+        user = User.objects.get(id=request.data['uid'])
 
         if action == "add":
             try:
@@ -197,7 +211,7 @@ class UserViewSet(ModelViewSet):
                 feed = feed.feed
 
                 if feed.opensearch_totalresults == 1 and entries[0].title == "Error":
-                    return Response({'Error': 'Invalid arxiv_id', }, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'Error': 'Invalid arxiv_id', }, status=HTTP_400_BAD_REQUEST)
                 
                 entry = entries[0]
 

@@ -27,6 +27,7 @@ class UserGetSerializer(ModelSerializer):
             'profile_picture',
             'email_address',
             'bookmarks',
+            'downloads'
         ]
         read_only_fields = [
             'id',
@@ -35,4 +36,5 @@ class UserGetSerializer(ModelSerializer):
             'profile_picture',
             'email_address',
             'bookmarks',
+            'downloads'
         ]

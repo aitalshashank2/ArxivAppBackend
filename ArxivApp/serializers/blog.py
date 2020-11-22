@@ -5,7 +5,6 @@ from ArxivApp.models import Blog
 
 
 class BlogSerializer(ModelSerializer):
-    # author = UserPostSerializer()
     class Meta:
         model = Blog
         fields = [
@@ -17,6 +16,5 @@ class BlogSerializer(ModelSerializer):
         ]
         read_only_fields = [
             'id',
-            'author',
             'votes',
         ]

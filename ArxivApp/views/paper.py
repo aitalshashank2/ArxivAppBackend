@@ -15,7 +15,6 @@ class PaperViewSet(viewsets.ModelViewSet):
 
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
-    permission_classes = (IsAuthenticated,)
 
     @action(detail=False, methods=['get', ],)
     def search(self, request, *args, **kwargs):
