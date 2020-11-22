@@ -38,6 +38,7 @@ class UserViewSet(ModelViewSet):
                 serializer.save()
                 return Response(serializer.data, status=HTTP_201_CREATED)
             else:
+                print(serializer.errors)
                 return Response(serializer.errors, status=HTTP_406_NOT_ACCEPTABLE)
 
 
