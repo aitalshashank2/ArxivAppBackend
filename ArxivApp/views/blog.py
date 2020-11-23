@@ -7,11 +7,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.serializers import Serializer
 
 from ArxivApp.models import Blog
-from ArxivApp.serializers import BlogSerializer
+from ArxivApp.serializers import BlogGetSerializer, BlogPostSerializer
 
 
 class BlogViewSet(viewsets.ModelViewSet):
-    serializer_class = BlogSerializer
+    def get_serializer_class(self):
+        if self.action == "create" or self.action == "update" or self.action == "partial":
+            return BlogPostSerializer
+        else:
+            return BlogGetSerializer
     queryset = Blog.objects.all().order_by('-votes')
 
     # Implement search based on the initial characters of the blog titles and author's full name
